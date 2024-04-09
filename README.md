@@ -11,5 +11,5 @@ This program is *USE AT YOUR OWN RISK.* The way this program operates is it will
 
 ## Credits:
 - https://stardb.gg/api/achievements for achievement ID data
-- https://github.com/visibou/lunarengine for allowing me to find connect the dots between memory addresses in development in a non-intrusive way
+- https://github.com/visibou/lunarengine for allowing me to connect the dots between memory addresses in development in a non-intrusive way (Lunar Engine is not in any way used in this program, this was only used in the development process)
 - https://lonami.dev/blog/woce-2/ for helping me with exact-value scanning
