@@ -4,9 +4,9 @@ mod data;
 use std::{collections::HashMap, fs};
 
 use data::data::AchievementContainer;
-use winapi::um::winnt::{self, PAGE_NOCACHE, PAGE_READONLY};
-use crate::{data::data::{AchievementId, MemAchievement}, process::process::{enum_proc, Process}};
-use read_process_memory;
+use serde::Serialize;
+use winapi::um::winnt;
+use crate::{data::data::AchievementId, process::process::{enum_proc, Process}};
 
 const ADDR_LOWER: usize = 0x0000070000000000;
 const ADDR_UPPER: usize = 0x0000400000000000;
@@ -55,8 +55,8 @@ fn main()
     println!("Total memory size: {}MB", mem_size as f64 * 0.000001);
 
     
-    // The next step is to find the memory address of the achievement data.
-    let debug_id: i32 = 4070421;
+
+    let debug_id: i32 = 4070421; // debug achievement, this is the id for Trauma Team Platinum Bundle
     let target = debug_id.to_ne_bytes();
 
     let regions = hsr_proc
@@ -73,7 +73,6 @@ fn main()
     struct FoundChive {
         count: u32,
         status: u32,
-        mem_achievement: MemAchievement,
     }
     
     let mut completed_counter = 0;
@@ -116,7 +115,7 @@ fn main()
                                         found_chive.count += 1;
                                     }
                                 } else {
-                                    found_chives.insert(data::data::AchievementId(window.try_into().unwrap()), FoundChive { count: 1, status, mem_achievement: chive.clone() });
+                                    found_chives.insert(data::data::AchievementId(window.try_into().unwrap()), FoundChive { count: 1, status });
                                 }
                             }
                             _ => (),
@@ -127,16 +126,24 @@ fn main()
             //Err(err) => eprintln!( "Failed to read {} bytes at {:?}: {}", region.RegionSize, region.BaseAddress, err, ),
         }
     });
-    let mut reports: Vec<String> = Vec::new();
+
+    #[derive(Serialize)]
+    struct Output
+    {
+        achievements: Vec<String>
+    }
+    
+    let mut reports: Output = Output { achievements: Vec::new() };
     for (id, chive) in found_chives.iter() {
         match chive.status
         {
-            3 => {reports.push(unsafe { std::mem::transmute::<[u8; 4], u32>(id.0).to_string() + "\n" } ); completed_counter += 1 },
-            1 => {/*reports.push(String::from(format!("Achievement: {} \n ID: {} \n Status: {} \n ------ \n", chive.mem_achievement.name, unsafe { std::mem::transmute::<[u8; 4], u32>(id.0) }, "Incomplete")));*/ uncompleted_counter += 1},
+            3 => {reports.achievements.push(unsafe { std::mem::transmute::<[u8; 4], u32>(id.0).to_string()} ); completed_counter += 1 },
+            1 => {uncompleted_counter += 1},
             _ => (),
         }
     }
-    fs::write("output.txt", reports.join("")).expect("Unable to write file");
+    fs::write("output.json", serde_json::to_string_pretty(&reports).unwrap()).expect("Unable to write to achievement file.");
+    println!("Data written to output.json");
     println!("Completed: {}", completed_counter);
     println!("Uncompleted: {}", uncompleted_counter);
 
