@@ -1,7 +1,7 @@
 # Honkai Star Rail Achievement Scanner
 
 ## `⚠️ Disclaimer ⚠️`
-This program is *USE AT YOUR OWN RISK.* The way this program operates is it will create a handle to the StarRail.exe process, and search the memory for specific achievement IDs and offset them for results. There is some evidence around that EasyAntiCheat (HSR's Anticheat) will detect open handles, though no evidence of this has been found during testing, including leaving a handle open and reading data for around an hour. If you are concerned about EAC detection, please use (this achievement scanner)['https://github.com/hashblen/HSRAchievementScanner/releases/tag/v1.2'].
+This program is *USE AT YOUR OWN RISK.* The way this program operates is it will create a handle to the StarRail.exe process, and search the memory for specific achievement IDs and offset them for results. There is some evidence around that EasyAntiCheat (HSR's Anticheat) will detect open handles, though no evidence of this has been found during testing, including leaving a handle open and reading data for around an hour. If you are concerned about EAC detection, please use [this achievement scanner]('https://github.com/hashblen/HSRAchievementScanner/releases/tag/v1.2').
 
 ## Functionality:
 - Creates a handle to the StarRail.exe process
