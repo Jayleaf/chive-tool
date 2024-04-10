@@ -1,15 +1,9 @@
-use serde::Deserialize;
-
-pub mod data 
-{
-    use std::{collections::{HashMap, HashSet}, fs::File, io::BufReader};
-
+pub mod data {
+    use std::collections::HashMap;
     use serde::Deserialize;
 
-
     #[derive(Deserialize)]
-    pub struct Achievement 
-    {
+    pub struct Achievement {
         pub id: u32,
         pub series: u32,
         pub series_name: String,
@@ -31,30 +25,27 @@ pub mod data
         pub name: String,
     }
 
-    pub struct AchievementContainer
-    {
-        pub achievements: HashMap<AchievementId, MemAchievement>
+    pub struct AchievementContainer {
+        pub achievements: HashMap<AchievementId, MemAchievement>,
     }
 
     const ACHIEVEMENTS: &str = include_str!("achievements.json");
 
-    impl AchievementContainer
-    {
-        pub fn get() -> AchievementContainer
-        {
-
+    impl AchievementContainer {
+        pub fn get() -> AchievementContainer {
             // Read the JSON contents of the file as an instance of `User`.
             let achievements: Vec<Achievement> = serde_json::from_str(ACHIEVEMENTS).unwrap();
-            let achievements = achievements.into_iter().map(|a| {
-                let id = a.id.to_ne_bytes();
-                let id = AchievementId(id);
-                let mem_achievement = MemAchievement { name: a.name };
-                (id, mem_achievement)
-            }).collect();
-            
-            
+            let achievements = achievements
+                .into_iter()
+                .map(|a| {
+                    let id = a.id.to_ne_bytes();
+                    let id = AchievementId(id);
+                    let mem_achievement = MemAchievement { name: a.name };
+                    (id, mem_achievement)
+                })
+                .collect();
+
             AchievementContainer { achievements }
         }
     }
-
 }
