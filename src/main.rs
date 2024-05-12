@@ -115,7 +115,7 @@ fn main() {
 
     #[derive(Serialize)]
     struct Output {
-        achievements: Vec<String>,
+        achievements: Vec<u32>,
     }
 
     let mut reports: Output = Output {
@@ -126,7 +126,7 @@ fn main() {
             3 => {
                 reports
                     .achievements
-                    .push(unsafe { std::mem::transmute::<[u8; 4], u32>(id.0).to_string() });
+                    .push(unsafe { std::mem::transmute::<[u8; 4], u32>(id.0) });
                 completed_counter += 1
             }
             1 => uncompleted_counter += 1,
