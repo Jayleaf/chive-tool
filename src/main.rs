@@ -12,6 +12,13 @@ use colored::*;
 const ADDR_LOWER: usize = 0x0000070000000000;
 const ADDR_UPPER: usize = 0x0000400000000000;
 
+const STRANGE_ACHIEVEMENTS: [&str; 4] = [
+    "Pied Piper of Hamelin",
+    "Trigger Warning",
+    "Divine Judgment Does Not Discriminate",
+    "Full Metal Racket",
+];
+
 fn main() {
     // The first step is finding the Star Rail process.
 
@@ -84,9 +91,10 @@ fn main() {
                     else 
                     {
                         println!("^----------------------DUPLICATE---------------------^");
-                        if found_chive.status != 3
-                            || (found_chive.status == 3 && status == 1 && addl_check == 1)
+                        if (found_chive.status != 3 && !STRANGE_ACHIEVEMENTS.iter().any(|c| c == &chive.name ))
+                        || (addl_check == 1)
                         {
+                            println!("{}", "Replacing duplicate...".green().bold());
                             found_chive.count += 1;
                             found_chive.status = status;
                         }
