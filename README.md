@@ -1,6 +1,6 @@
 # Honkai Star Rail Achievement Scanner
 
-##`🟢 Notice 🟢`
+## `🟢 Notice 🟢`
 As of now, this tool serves no purpose as I there is no way to import this checker's output to the stardb website. They created a new packet-scanning tracker which, albeit harder to set up, will yield more data.
 This is, at this point, archived. Feel free to use the code how you feel.
 
